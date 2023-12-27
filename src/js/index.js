@@ -396,6 +396,25 @@ import './custom-clipboard-copy.js';
       scanInstructionsEl.hidden = true;
       scanBtn.hidden = false;
       scanFrameEl.hidden = true;
+
+      fetch(`http://api.test.pryamaya.ru/barcode-app/barcode-getting-data?barcodeId=${barcode.rawValue}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+            var scanBtn = document.querySelector('#scanBtn');
+
+            if (scanBtn) {
+              scanBtn.textContent = data.text;
+            }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
       beep(200, 860, 0.03, 'square');
       vibrate();
       return;
