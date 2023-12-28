@@ -397,7 +397,7 @@ import './custom-clipboard-copy.js';
       scanBtn.hidden = false;
       scanFrameEl.hidden = true;
 
-      fetch(`http://api.test.pryamaya.ru/barcode-app/barcode-getting-data?barcodeId=${barcode.rawValue}`)
+      fetch(`https://api.test.pryamaya.ru/barcode-app/barcode-getting-data?barcodeId=${barcode.rawValue}`)
         .then(response => {
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
