@@ -134,7 +134,7 @@ import './custom-clipboard-copy.js';
   });
 
   if (Array.isArray(formats) && formats.length > 0) {
-    supportedFormatsEl.textContent = `Supported formats: ${formats.join(', ')}`;
+    supportedFormatsEl.textContent = ``;
   }
 
   const beep = (() => {
@@ -405,10 +405,19 @@ import './custom-clipboard-copy.js';
           return response.json();
         })
         .then(data => {
-            var scanBtn = document.querySelector('#scanBtn');
-
             if (scanBtn) {
-              scanBtn.textContent = data.text;
+              scanBtn.innerHTML = data.text;
+            }
+
+            if (data.status === 'success') {
+              capturePhotoEl.style.borderColor = '#20ad65';
+              scanBtn.style.color = '#20ad65';
+            } else if (data.status === 'already') {
+              capturePhotoEl.style.borderColor = '#dc3545';
+              scanBtn.style.color = '#dc3545';
+            } else if (data.status === 'failed') {
+              capturePhotoEl.style.borderColor = '#ffc107';
+              scanBtn.style.color = '#ffc107';
             }
         })
         .catch(error => {
@@ -478,6 +487,7 @@ import './custom-clipboard-copy.js';
   scanBtn.addEventListener('click', () => {
     scanBtn.hidden = true;
     scanFrameEl.hidden = false;
+    capturePhotoEl.style.borderColor = '#dbdbdb';
     emptyResults(cameraResultsEl);
     cameraResultsEl.close();
     scan();
