@@ -37,18 +37,15 @@ import './custom-clipboard-copy.js';
     process.env.NODE_ENV === 'development' && console.log(...args);
   }
 
-  console.log(process.env.NODE_ENV)
-
   let deferredPrompt;
 
   window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
-    deferredPrompt = event; // Сохраняем событие в переменной deferredPrompt
+    deferredPrompt = event;
     showAddToHomeScreenUI();
   });
 
   function showAddToHomeScreenUI() {
-    // Показываем кнопку или сообщение для пользователя, предлагая добавить приложение на рабочий стол
     const addToHomeScreenButton = document.getElementById('addToHomeScreenButton');
     addToHomeScreenButton.addEventListener('click', () => {
       if (deferredPrompt) {
@@ -60,7 +57,7 @@ import './custom-clipboard-copy.js';
             } else {
               console.log('Пользователь отклонил приглашение для установки');
             }
-            deferredPrompt = null; // Очищаем deferredPrompt после его использования
+            deferredPrompt = null;
           })
           .catch((error) => {
             console.error('Произошла ошибка при запросе на добавление на рабочий стол', error.message);
@@ -68,8 +65,6 @@ import './custom-clipboard-copy.js';
       }
     });
   }
-
-
 
   if (!('BarcodeDetector' in window)) {
     try {
@@ -431,7 +426,7 @@ import './custom-clipboard-copy.js';
       scanBtn.hidden = false;
       scanFrameEl.hidden = true;
 
-      fetch(`https://api.test.pryamaya.ru/barcode-app/barcode-getting-data?barcodeId=${barcode.rawValue}`)
+      fetch(`https://api.pryamaya.ru/barcode-app/barcode-getting-data?barcodeId=${barcode.rawValue}`)
         .then(response => {
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
