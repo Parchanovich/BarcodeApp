@@ -37,6 +37,16 @@ import './custom-clipboard-copy.js';
     process.env.NODE_ENV === 'development' && console.log(...args);
   }
 
+  console.log(process.env.NODE_ENV)
+
+  let promptEvent;
+  window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    console.log(event);
+    promptEvent = event;
+  });
+
+
   if (!('BarcodeDetector' in window)) {
     try {
       await import('barcode-detector');
