@@ -39,12 +39,36 @@ import './custom-clipboard-copy.js';
 
   console.log(process.env.NODE_ENV)
 
-  let promptEvent;
+  let deferredPrompt;
+
   window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
-    console.log(event);
-    promptEvent = event;
+    deferredPrompt = event; // Сохраняем событие в переменной deferredPrompt
+    showAddToHomeScreenUI();
   });
+
+  function showAddToHomeScreenUI() {
+    // Показываем кнопку или сообщение для пользователя, предлагая добавить приложение на рабочий стол
+    const addToHomeScreenButton = document.getElementById('addToHomeScreenButton');
+    addToHomeScreenButton.addEventListener('click', () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice
+          .then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+              console.log('Пользователь принял приглашение для установки');
+            } else {
+              console.log('Пользователь отклонил приглашение для установки');
+            }
+            deferredPrompt = null; // Очищаем deferredPrompt после его использования
+          })
+          .catch((error) => {
+            console.error('Произошла ошибка при запросе на добавление на рабочий стол', error.message);
+          });
+      }
+    });
+  }
+
 
 
   if (!('BarcodeDetector' in window)) {
